@@ -1,0 +1,6 @@
+{
+  "name": "이온 형성 시뮬레이션",
+  "description": "중2 과학 물질의 구성 - 원자에서 양이온과 음이온이 형성되는 과정을 탐구하는 인터랙티브 시뮬레이션",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
