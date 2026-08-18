@@ -24,6 +24,11 @@ interface DraggedElectron {
   fromZone: 'atom' | 'tray';
 }
 
+// Bohr shell capacities for middle-school scope (Z <= 20): K+L+M+N = 2+8+8+2
+export const MAX_ELECTRONS = 20;
+// Radius of the atom drop-drag zone boundary, shared by the visual guide circle and hit-testing
+const ATOM_ZONE_RADIUS = 220;
+
 export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
   element,
   currentElectrons,
@@ -156,8 +161,13 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
     sound.playClick();
   };
 
+  const draggedRef = useRef<DraggedElectron | null>(null);
+  useEffect(() => {
+    draggedRef.current = dragged;
+  }, [dragged]);
+
   const handlePointerMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!dragged) return;
+    if (!draggedRef.current) return;
     const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
     const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
     const coords = getSvgCoordinates(clientX, clientY);
@@ -166,25 +176,26 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
 
     // Distance checks
     const distToCenter = Math.hypot(coords.x - cx, coords.y - cy);
-    setIsHoveringAtomZone(distToCenter < 230);
+    setIsHoveringAtomZone(distToCenter < ATOM_ZONE_RADIUS);
     setIsHoveringTrayZone(coords.y > 480 || coords.x < 120 || coords.x > 580);
-  }, [dragged, cx, cy, getSvgCoordinates]);
+  }, [cx, cy, getSvgCoordinates]);
 
   const handlePointerUp = useCallback(() => {
-    if (!dragged) return;
+    const current = draggedRef.current;
+    if (!current) return;
 
-    const { currentX, currentY, fromZone } = dragged;
+    const { currentX, currentY, fromZone } = current;
     const distToCenter = Math.hypot(currentX - cx, currentY - cy);
 
     if (fromZone === 'atom') {
-      // If dragged away from atom (distance > 210), release/remove electron (Cation formation)
-      if (distToCenter > 210 && currentElectrons > 0) {
+      // If dragged away from atom (distance > boundary), release/remove electron (Cation formation)
+      if (distToCenter > ATOM_ZONE_RADIUS && currentElectrons > 0) {
         onElectronsChange(currentElectrons - 1, 'user_drag_out');
         sound.playElectronLost();
       }
     } else if (fromZone === 'tray') {
-      // If dragged into atom center zone (distance < 220), capture electron (Anion formation)
-      if (distToCenter < 220 && currentElectrons < 24) {
+      // If dragged into atom center zone (distance < boundary), capture electron (Anion formation)
+      if (distToCenter < ATOM_ZONE_RADIUS && currentElectrons < MAX_ELECTRONS) {
         onElectronsChange(currentElectrons + 1, 'user_drag_in');
         sound.playElectronGained();
       }
@@ -193,10 +204,11 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
     setDragged(null);
     setIsHoveringAtomZone(false);
     setIsHoveringTrayZone(false);
-  }, [dragged, cx, cy, currentElectrons, onElectronsChange]);
+  }, [cx, cy, currentElectrons, onElectronsChange]);
 
+  const isDragging = dragged !== null;
   useEffect(() => {
-    if (dragged) {
+    if (isDragging) {
       window.addEventListener('mousemove', handlePointerMove, { passive: true });
       window.addEventListener('mouseup', handlePointerUp);
       window.addEventListener('touchmove', handlePointerMove, { passive: true });
@@ -208,7 +220,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
         window.removeEventListener('touchend', handlePointerUp);
       };
     }
-  }, [dragged, handlePointerMove, handlePointerUp]);
+  }, [isDragging, handlePointerMove, handlePointerUp]);
 
   // Quick remove outer electron directly on click
   const handleQuickRemove = (e: React.MouseEvent) => {
@@ -222,7 +234,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
   // Quick add electron from tray on click
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (currentElectrons < 24) {
+    if (currentElectrons < MAX_ELECTRONS) {
       onElectronsChange(currentElectrons + 1, 'user_drag_in');
       sound.playElectronGained();
     }
@@ -397,7 +409,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
             <button
               id="add-electron-quick-btn"
               onClick={handleQuickAdd}
-              disabled={currentElectrons >= 24}
+              disabled={currentElectrons >= MAX_ELECTRONS}
               className="px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 hover:bg-rose-500/30 active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all flex items-center gap-1 text-[10px] sm:text-[11px] font-medium cursor-pointer"
             >
               + 전자 획득 (음이온-)
@@ -541,7 +553,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
             <circle
               cx={cx}
               cy={cy}
-              r={220}
+              r={ATOM_ZONE_RADIUS}
               fill="none"
               stroke={isHoveringAtomZone ? '#818cf8' : '#475569'}
               strokeWidth={isHoveringAtomZone ? 2 : 1}

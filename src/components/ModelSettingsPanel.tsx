@@ -11,20 +11,12 @@ interface ModelSettingsPanelProps {
   onMakeStableIon: () => void;
 }
 
+const SUPERSCRIPT_DIGITS = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+
 export function formatIonSymbol(symbol: string, netCharge: number): string {
   if (netCharge === 0) return `${symbol}`;
   const abs = Math.abs(netCharge);
-  const numSuperscripts: Record<number, string> = {
-    1: '',
-    2: '²',
-    3: '³',
-    4: '⁴',
-    5: '⁵',
-    6: '⁶',
-    7: '⁷',
-    8: '⁸',
-  };
-  const numStr = numSuperscripts[abs] ?? `${abs}`;
+  const numStr = abs === 1 ? '' : String(abs).split('').map((d) => SUPERSCRIPT_DIGITS[Number(d)]).join('');
   const signChar = netCharge > 0 ? '⁺' : '⁻';
   return `${symbol}${numStr}${signChar}`;
 }

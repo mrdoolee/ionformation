@@ -10,7 +10,7 @@ import { ELEMENTS_DATA, LEARNING_MISSIONS } from './data/elements';
 import { ElementSymbol, ModelType, LearningMission } from './types';
 import { ElementSelectionPanel } from './components/ElementSelectionPanel';
 import { ModelSettingsPanel } from './components/ModelSettingsPanel';
-import { AtomSimulationSvg } from './components/AtomSimulationSvg';
+import { AtomSimulationSvg, MAX_ELECTRONS } from './components/AtomSimulationSvg';
 import { ModelVisualSettingsModal } from './components/ModelVisualSettingsModal';
 import { MissionTheoryModal } from './components/MissionTheoryModal';
 import { HelpModal } from './components/HelpModal';
@@ -83,7 +83,7 @@ export default function App() {
     newCount: number,
     _reason: 'user_drag_out' | 'user_drag_in' | 'button' | 'auto'
   ) => {
-    const clamped = Math.max(0, Math.min(24, newCount));
+    const clamped = Math.max(0, Math.min(MAX_ELECTRONS, newCount));
     setCurrentElectrons(clamped);
 
     const netCharge = currentElement.protons - clamped;
@@ -98,7 +98,6 @@ export default function App() {
   // 1-Click Make Stable Ion
   const handleMakeStableIon = () => {
     const targetElectrons = currentElement.protons - currentElement.stableCharge;
-    sound.playSuccessChime();
     setCurrentElectrons(targetElectrons);
 
     const netCharge = currentElement.stableCharge;
