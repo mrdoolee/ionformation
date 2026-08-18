@@ -136,25 +136,25 @@ export default function App() {
     <div className="h-screen max-h-screen w-full bg-gradient-to-br from-slate-950 via-indigo-950/90 to-slate-950 flex flex-col justify-between text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-200 font-sans overflow-hidden" style={{ backgroundColor: '#020617' }}>
       
       {/* 1. TOP GLOBAL SLEEK NAV BAR */}
-      <nav className="h-13 flex items-center justify-between px-3 sm:px-5 bg-white/5 backdrop-blur-md border-b border-white/10 shrink-0 z-30">
-        <div className="flex items-center gap-2.5">
+      <nav className="min-h-13 flex items-center justify-between gap-2 px-3 sm:px-5 py-1.5 bg-white/5 backdrop-blur-md border-b border-white/10 shrink-0 z-30">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/25 border border-indigo-400/30 shrink-0">
             <Atom className="w-4 h-4 text-white animate-spin" style={{ animationDuration: '20s' }} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold tracking-tight text-white">
+              <h1 className="text-sm sm:text-base font-bold tracking-tight text-white truncate">
                 이온 형성 시뮬레이션
               </h1>
             </div>
-            <p className="text-[10px] text-slate-400 hidden md:block">
+            <p className="text-[10px] text-slate-400 hidden md:block truncate">
               원자에서 전자의 이동에 따른 양이온(+)과 음이온(-)의 형성 탐구
             </p>
           </div>
         </div>
 
         {/* Header Action Buttons in Sleek Pill Style */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Mission Challenge Button */}
           <button
             id="open-missions-btn"
