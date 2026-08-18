@@ -34,7 +34,7 @@ export default function App() {
   const [animSpeed, setAnimSpeed] = useState<number>(1.0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [showLabels, setShowLabels] = useState<boolean>(true);
-  const [mobileTab, setMobileTab] = useState<'all' | 'controls' | 'atom'>('all');
+  const [mobileTab, setMobileTab] = useState<'controls' | 'atom'>('controls');
 
   // Modals
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
@@ -242,16 +242,6 @@ export default function App() {
       <div className="lg:hidden w-full px-2.5 sm:px-3 pt-1.5 pb-0.5 flex items-center justify-center shrink-0">
         <div className="w-full max-w-md flex bg-slate-900/90 rounded-xl p-0.5 sm:p-1 border border-white/10 shadow-lg text-xs font-semibold">
           <button
-            onClick={() => setMobileTab('all')}
-            className={`flex-1 py-1 rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
-              mobileTab === 'all'
-                ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            전체 2단
-          </button>
-          <button
             onClick={() => setMobileTab('controls')}
             className={`flex-1 py-1 rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
               mobileTab === 'controls'
@@ -276,22 +266,14 @@ export default function App() {
 
       {/* 3. MAIN WORKSPACE: 2-TIER LAYERED WORKSPACE (왼쪽: 원소정보/조작 + 원소선택 / 오른쪽: 원자모형 시뮬레이션) */}
       <main
-        className={`flex-1 min-h-0 p-2 sm:p-3 gap-2 sm:gap-3 relative ${
-          mobileTab === 'all'
-            ? 'flex flex-col md:flex-row landscape:flex-row overflow-y-auto md:overflow-hidden landscape:overflow-hidden'
-            : 'flex flex-col overflow-hidden'
-        }`}
+        className="flex-1 min-h-0 p-2 sm:p-3 gap-2 sm:gap-3 relative flex flex-col lg:flex-row overflow-hidden"
       >
         
         {/* Left Column (왼쪽 레이어: 상단 원소 정보 및 이온 조작 + 하단 원소 선택) */}
         <section
           id="layer-left-column"
-          className={`z-10 flex flex-col gap-2 sm:gap-2.5 ${
-            mobileTab === 'controls'
-              ? 'w-full h-full overflow-y-auto pr-0.5'
-              : mobileTab === 'atom'
-              ? 'hidden'
-              : 'w-full md:w-[310px] lg:w-[330px] xl:w-[360px] landscape:w-[280px] sm:landscape:w-[310px] shrink-0 h-auto md:h-full landscape:h-full overflow-y-auto pr-0.5'
+          className={`z-10 flex-col gap-2 sm:gap-2.5 w-full lg:w-[330px] xl:w-[360px] shrink-0 h-full overflow-y-auto pr-0.5 ${
+            mobileTab === 'atom' ? 'hidden lg:flex' : 'flex'
           }`}
         >
           {/* Top: 원소 정보 및 이온 조작 */}
@@ -313,12 +295,8 @@ export default function App() {
         {/* Right Column (오른쪽 레이어: 원자 모형 시뮬레이션 인터랙티브 무대) */}
         <section
           id="layer-right-atom-simulation"
-          className={`relative rounded-2xl bg-slate-900/40 backdrop-blur-sm border border-white/10 shadow-2xl overflow-hidden ${
-            mobileTab === 'atom'
-              ? 'w-full h-full flex flex-col'
-              : mobileTab === 'controls'
-              ? 'hidden'
-              : 'flex-1 min-w-0 flex flex-col w-full md:w-auto h-[480px] md:h-full landscape:h-full shrink-0 md:shrink'
+          className={`relative rounded-2xl bg-slate-900/40 backdrop-blur-sm border border-white/10 shadow-2xl overflow-hidden flex-col flex-1 min-w-0 w-full lg:w-auto h-full shrink-0 lg:shrink ${
+            mobileTab === 'controls' ? 'hidden lg:flex' : 'flex'
           }`}
         >
           {/* Subtle Grid Dot Overlay */}
