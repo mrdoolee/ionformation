@@ -403,7 +403,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
               disabled={currentElectrons <= 0}
               className="px-1.5 sm:px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 hover:bg-indigo-500/30 active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all flex items-center gap-1 text-[10px] sm:text-[11px] font-medium cursor-pointer"
             >
-              - 전자 방출 (양이온+)
+              전자 방출
             </button>
             
             <button
@@ -412,7 +412,7 @@ export const AtomSimulationSvg: React.FC<AtomSimulationSvgProps> = ({
               disabled={currentElectrons >= MAX_ELECTRONS}
               className="px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 hover:bg-rose-500/30 active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all flex items-center gap-1 text-[10px] sm:text-[11px] font-medium cursor-pointer"
             >
-              + 전자 획득 (음이온-)
+              전자 획득
             </button>
           </div>
 

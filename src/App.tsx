@@ -20,8 +20,6 @@ import {
   Atom,
   BookOpen,
   Trophy,
-  Sparkles,
-  CheckCircle2,
   Info,
 } from 'lucide-react';
 
@@ -45,7 +43,7 @@ export default function App() {
 
   // Missions
   const [missions, setMissions] = useState<LearningMission[]>(LEARNING_MISSIONS);
-  const [activeMission, setActiveMission] = useState<LearningMission | null>(missions[0]);
+  const [activeMission, setActiveMission] = useState<LearningMission | null>(null);
 
   // Trigger mission completion theory modal
   const checkAndCompleteMission = (elementSymbol: string, netCharge: number) => {
@@ -197,45 +195,6 @@ export default function App() {
           </button>
         </div>
       </nav>
-
-      {/* 2. ACTIVE MISSION PROMPT BANNER (if mission active) */}
-      {activeMission && (
-        <div className="w-full bg-indigo-950/60 backdrop-blur-md border-b border-indigo-500/20 px-3 sm:px-5 py-1.5 flex items-center justify-between gap-2 text-xs shrink-0">
-          <div className="flex items-center gap-2 flex-wrap text-[11px]">
-            <span className="px-2 py-0.2 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 font-bold flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5 text-amber-300" />
-              진행 중 미션
-            </span>
-            <span className="font-bold text-slate-200">{activeMission.title}</span>
-            <span className="text-slate-400 hidden md:inline">| {activeMission.instruction}</span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            {activeMission.completed ? (
-              <div className="flex items-center gap-1.5">
-                <span className="flex items-center gap-1 text-emerald-400 font-bold text-xs">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> 미션 완료
-                </span>
-                <button
-                  onClick={() => handleViewTheory(activeMission)}
-                  className="px-2 py-0.5 rounded-md bg-indigo-600/40 hover:bg-indigo-600/70 border border-indigo-400/40 text-indigo-200 text-[10px] font-semibold cursor-pointer transition-colors"
-                >
-                  이론 해설 보기 📖
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  sound.playClick();
-                  setIsMissionsOpen(true);
-                }}
-                className="text-indigo-400 hover:text-indigo-300 font-semibold cursor-pointer text-[11px]"
-              >
-                다른 미션 보기 &gt;
-              </button>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Responsive Mobile Tab Switcher (Visible only on < lg screens) */}
       <div className="lg:hidden w-full px-2.5 sm:px-3 pt-1.5 pb-0.5 flex items-center justify-center shrink-0">
