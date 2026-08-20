@@ -15,6 +15,7 @@ import { ModelVisualSettingsModal } from './components/ModelVisualSettingsModal'
 import { MissionTheoryModal } from './components/MissionTheoryModal';
 import { HelpModal } from './components/HelpModal';
 import { MissionsModal } from './components/MissionsModal';
+import { CreditModal } from './components/CreditModal';
 import { sound } from './utils/audio';
 import {
   Atom,
@@ -39,6 +40,7 @@ export default function App() {
   const [isMissionsOpen, setIsMissionsOpen] = useState<boolean>(false);
   const [isVisualSettingsOpen, setIsVisualSettingsOpen] = useState<boolean>(false);
   const [isTheoryModalOpen, setIsTheoryModalOpen] = useState<boolean>(false);
+  const [isCreditModalOpen, setIsCreditModalOpen] = useState<boolean>(false);
   const [theoryMission, setTheoryMission] = useState<LearningMission | null>(null);
 
   // Missions
@@ -332,9 +334,20 @@ export default function App() {
       />
 
       {/* 5. FOOTER (MANDATORY REQUIREMENT WITH SLEEK INTERFACE STYLING) */}
-      <footer className="h-6 flex items-center justify-center bg-slate-950/90 border-t border-white/5 text-[9px] text-slate-500 tracking-widest uppercase shrink-0">
-        © 2026 Designed & Developed by 두리쌤. All rights reserved.
+      <footer className="min-h-6 py-1.5 flex items-center justify-center bg-slate-950/90 border-t border-white/5 text-[9px] text-slate-500 tracking-widest uppercase shrink-0">
+        <span>
+          © 2026 Designed &amp; Developed by{' '}
+          <button
+            onClick={() => setIsCreditModalOpen(true)}
+            className="underline underline-offset-2 text-slate-400 hover:text-slate-200 normal-case tracking-normal transition-colors cursor-pointer"
+          >
+            두리쌤
+          </button>
+          . All rights reserved.
+        </span>
       </footer>
+
+      <CreditModal isOpen={isCreditModalOpen} onClose={() => setIsCreditModalOpen(false)} />
 
     </div>
   );
